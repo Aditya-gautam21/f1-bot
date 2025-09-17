@@ -1,14 +1,14 @@
-import "./global.css"
+import "./global.css";
 
 export const metadata = {
-    title: "F1GPT",
-    description: "The place to go for all your f1 questions!"
-}
+  title: "F1GPT",
+  description: "The place to go for all your f1 questions!"
+};
 
-const RootLayout = ({ children }) => {
-    return (
-        <html lang="en">
-        <body>{children}</body>
-        </html>
-    )
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
 }
