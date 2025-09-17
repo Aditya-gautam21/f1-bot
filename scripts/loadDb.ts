@@ -50,19 +50,28 @@ const loadSampleData = async () => {
     const chunks = await splitter.splitText(content);
     console.log(`Processing ${chunks.length} chunks...`);
 
-    for await (const chunk of chunks) {
+    const batchSize = 50;
+    for (let i = 0; i < chunks.length; i += batchSize) {
+        const batch = chunks.slice(i, i + batchSize);
+        console.log(`Processing batch ${i / batchSize + 1}...`);
+
         const embedding = await openai.embeddings.create({
             model: "text-embedding-3-small",
-            input: chunk,
+            input: batch,
             encoding_format: "float"
         });
-        const vector = embedding.data[0].embedding;
 
-        const res = await collection.insertOne({
-            $vector: vector,
-            text: chunk
-        });
+        for (let j = 0; j < embedding.data.length; j++) {
+            const vector = embedding.data[j].embedding;
+            const textChunk = batch[j];
+
+            await collection.insertOne({
+                $vector: vector,
+                text: textChunk
+            });
+        }
     }
+
     console.log("Data loading complete.");
 };
 
