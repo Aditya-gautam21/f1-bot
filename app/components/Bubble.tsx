@@ -1,3 +1,4 @@
+//Bubble element 
 const Bubble = ({ message }) => {
 const {content, role} = message
     return (
